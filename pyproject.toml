@@ -4,7 +4,9 @@ version = "0.1.0"
 description = "Convert TS interfaces to Python code"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "click>=8.1.7",
+]
 
 [project.scripts]
 tsi2py = "tsi2py.__main__:main"
