@@ -76,7 +76,7 @@ class APIResponseTypedDict(TypedDict):
     success: bool
     message: str
 
-class PathsTypedDict(TypedDict):
+class Paths(TypedDict):
     logs: str
     temp: str
 
@@ -84,7 +84,7 @@ class Config(TypedDict):
     env: "development" | "production" | "test"
     debug: bool
     version: int
-    paths: PathsTypedDict
+    paths: Paths
     maxRetries: number | null
 """
     )

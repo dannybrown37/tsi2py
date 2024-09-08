@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 from typing import TypedDict, Any
 
@@ -37,7 +38,7 @@ def generate_typed_dict(
     fields = []
     for key, value in properties.items():
         if isinstance(value, dict):
-            nested_name = key.capitalize() + 'TypedDict'
+            nested_name = key.capitalize()
             fields.append(f'{key}: {nested_name}')
             nested_dict = generate_typed_dict(
                 nested_name,
