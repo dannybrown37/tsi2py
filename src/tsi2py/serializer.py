@@ -1,6 +1,5 @@
-import re
 from pathlib import Path
-from typing import TypedDict, Any
+from typing import Any
 
 TYPE_MAPPING = {
     'string': 'str',
@@ -12,13 +11,10 @@ TYPE_MAPPING = {
 }
 
 
-def convert_ts_type(ts_type: str | list | dict) -> str:
+def convert_ts_type(ts_type: str | dict) -> str:
     """Convert TypeScript type to Python type."""
     if isinstance(ts_type, dict):
         return 'Any'
-    if isinstance(ts_type, list):
-        item_type = convert_ts_type(ts_type[0]) if ts_type else 'Any'
-        return f'list[{item_type}]'
     if ts_type.endswith('[]'):
         return f'list[{TYPE_MAPPING.get(ts_type[:-2], ts_type[:-2])}]'
     return TYPE_MAPPING.get(ts_type, ts_type)
@@ -73,7 +69,7 @@ def serialize(interfaces: dict[str, Any]) -> str:
 
     # Output to a file
     with Path('typed_dicts.py').open('w') as f:
-        f.write('from typing import TypedDict, List, Any\n\n')
+        f.write('from typing import TypedDict, Generic, Any\n\n')
         f.write('\n'.join(result))
 
     print('TypedDict classes have been generated and saved to typed_dicts.py')
