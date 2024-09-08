@@ -8,7 +8,39 @@ INTERFACE_COUNT_IN_SAMPLE_FILE = 5
 
 def test_parser() -> None:
     path = str(Path(__file__).parent / 'interfaces' / 'sample.ts')
-    print(path)
     interfaces = parse_interfaces(path)
-    print(interfaces)
-    assert len(interfaces) == INTERFACE_COUNT_IN_SAMPLE_FILE
+    assert interfaces == {
+        'APIResponse<T>': {
+            'data': 'T',
+            'message': 'string',
+            'success': 'boolean',
+        },
+        'Config': {
+            'debug': 'boolean',
+            'env': '"development" | "production" | "test"',
+            'maxRetries': 'number | null',
+            'paths': {'logs': 'string', 'temp': 'string'},
+            'version': 'number',
+        },
+        'Order': {
+            'orderDate': 'Date',
+            'orderId': 'number',
+            'products': 'Product[]',
+            'totalAmount': 'number',
+            'userId': 'number',
+        },
+        'Product': {
+            'available': 'boolean',
+            'id': 'string',
+            'name': 'string',
+            'price': 'number',
+            'tags': 'string[]',
+        },
+        'User': {
+            'createdAt': 'Date',
+            'email': 'string',
+            'id': 'number',
+            'isActive': 'boolean',
+            'username': 'string',
+        },
+    }
