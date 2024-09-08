@@ -2,6 +2,7 @@ from pathlib import Path
 from pprint import pprint
 
 from tsi2py.parser import parse_interfaces
+from tsi2py.serializer import serialize
 
 import click
 
@@ -12,6 +13,8 @@ def main(path: click.Path) -> None:
     path = str(path)
     interfaces = parse_interfaces(path)
     pprint(interfaces)
+    serialized = serialize(interfaces)
+    pprint(serialized)
 
 
 if __name__ == '__main__':
