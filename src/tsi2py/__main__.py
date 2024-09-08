@@ -14,7 +14,7 @@ def main(path: click.Path) -> None:
     interfaces = parse_interfaces(path)
     pprint(interfaces)
     serialized = serialize(interfaces)
-    pprint(serialized)
+    print(serialized)
 
 
 if __name__ == '__main__':
