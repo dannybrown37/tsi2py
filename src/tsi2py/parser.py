@@ -1,4 +1,5 @@
 import re
+from pathlib import Path
 
 
 def find_interfaces(text: str) -> list:
@@ -31,7 +32,9 @@ def find_interfaces(text: str) -> list:
     return interfaces
 
 
-def parse_interfaces(file_content: str) -> dict:  # noqa: C901
+def parse_interfaces(file_path: str) -> dict:  # noqa: C901
+    with Path(file_path).open('r') as f:
+        file_content = f.read()
     interfaces = {}
     matches = find_interfaces(file_content)
     for match in matches:

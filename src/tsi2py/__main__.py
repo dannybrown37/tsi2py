@@ -9,9 +9,8 @@ import click
 @click.command()
 @click.argument('path', type=click.Path(exists=True, dir_okay=False))
 def main(path: click.Path) -> None:
-    with Path(str(path)).open('r') as f:
-        data = f.read()
-    interfaces = parse_interfaces(data)
+    path = str(path)
+    interfaces = parse_interfaces(path)
     pprint(interfaces)
 
 
