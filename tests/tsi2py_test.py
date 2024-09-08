@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from tsi2py.parser import parse_interfaces
+from tsi2py.serializer import serialize
 
 
 def test_parser() -> None:
@@ -41,3 +42,49 @@ def test_parser() -> None:
             'username': 'string',
         },
     }
+
+
+def test_serializer() -> None:
+    path = str(Path(__file__).parent / 'interfaces' / 'sample.ts')
+    interfaces = parse_interfaces(path)
+    serialized = serialize(interfaces)
+    assert (
+        serialized
+        == """class User(TypedDict):
+    id: int
+    username: str
+    email: str
+    isActive: bool
+    createdAt: str
+
+class Product(TypedDict):
+    id: str
+    name: str
+    price: int
+    tags: list[str]
+    available: bool
+
+class Order(TypedDict):
+    orderId: int
+    userId: int
+    products: list[Product]
+    totalAmount: int
+    orderDate: str
+
+class APIResponseTypedDict(TypedDict):
+    data: Any
+    success: bool
+    message: str
+
+class PathsTypedDict(TypedDict):
+    logs: str
+    temp: str
+
+class Config(TypedDict):
+    env: "development" | "production" | "test"
+    debug: bool
+    version: int
+    paths: PathsTypedDict
+    maxRetries: number | null
+"""
+    )
