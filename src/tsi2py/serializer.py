@@ -15,6 +15,10 @@ def convert_ts_type(ts_type: str | dict) -> str:
     """Convert TypeScript type to Python type."""
     if isinstance(ts_type, dict):
         return 'Any'
+    if '|' in ts_type:
+        return ' | '.join(
+            convert_ts_type(t.strip()) for t in ts_type.split('|')
+        )
     if ts_type.endswith('[]'):
         return f'list[{TYPE_MAPPING.get(ts_type[:-2], ts_type[:-2])}]'
     return TYPE_MAPPING.get(ts_type, ts_type)
