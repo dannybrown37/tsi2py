@@ -71,8 +71,8 @@ class Order(TypedDict):
     totalAmount: int
     orderDate: str
 
-class APIResponseTypedDict(TypedDict):
-    data: Any
+class APIResponse(TypedDict, Generic[T]):
+    data: T
     success: bool
     message: str
 

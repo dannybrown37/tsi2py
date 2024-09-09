@@ -31,6 +31,7 @@ def generate_typed_dict(
     properties: dict[str, Any],
     processed: set,
     result: list,
+    generic: str | None = None,
 ) -> str:
     """Generate a Python TypedDict class definition from TS props."""
     if name in processed:
@@ -54,6 +55,10 @@ def generate_typed_dict(
             fields.append(f'{key}: {python_type}')
 
     fields_str = '\n    '.join(fields)
+    if generic:
+        return (
+            f'class {name}(TypedDict, Generic[{generic}]):\n    {fields_str}\n'
+        )
     return f'class {name}(TypedDict):\n    {fields_str}\n'
 
 
@@ -62,20 +67,33 @@ def serialize(interfaces: dict[str, Any]) -> str:
 
     # Generate TypedDict classes
     result = []
+    generics = []
     processed = set()
     for name, properties in interfaces.items():
-        typed_dict_name = name.replace('<T>', 'TypedDict')
+        generic = None
+        if '<' in name and '>' in name:
+            typed_dict_name = name.split('<')[0].strip()
+            generic = name.split('<')[1].split('>')[0].strip()
+            generics.append(generic)
+        else:
+            typed_dict_name = name
         typed_dict_str = generate_typed_dict(
             typed_dict_name,
             properties,
             processed,
             result,
+            generic,
         )
         result.append(typed_dict_str)
 
+    generics = ''.join([f'{g} = TypeVar("{g}")\n' for g in generics]) + '\n\n'
+
     # Output to a file
     with Path('typed_dicts.py').open('w') as f:
-        f.write('from typing import TypedDict, Literal, Generic, Any\n\n')
+        f.write(
+            'from typing import TypedDict, TypeVar, Literal, Generic, Any\n\n',
+        )
+        f.write(generics)
         f.write('\n'.join(result))
 
     print('TypedDict classes have been generated and saved to typed_dicts.py')
