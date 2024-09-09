@@ -13,3 +13,7 @@ interface Manager extends Employee {
   teamSize: number;
   managesDepartments: string[];
 }
+
+interface Supervisor extends Person, Manager {
+  supervisorId: number;
+}

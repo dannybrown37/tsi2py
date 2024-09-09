@@ -3,12 +3,18 @@ from pathlib import Path
 
 
 def find_interfaces(text: str) -> list:
-    interface_pattern = re.compile(r'interface\s+(\w+)(<\w+>)?\s*{')
+    regex = r'interface\s+(\w+)(<\w+>)?\s*(extends\s+[\w\s,]+)?\s*{'
+    interface_pattern = re.compile(regex)
     interfaces = []
 
     for match in interface_pattern.finditer(text):
         interface_name = match.group(1)
-        generic_type = match.group(2)  # Capture the generic type
+        generic_type = match.group(2)
+        extended_interface = (
+            match.group(3).replace('extends', '').strip()
+            if match.group(3)
+            else None
+        )
         start_index = match.end()
         brace_count = 1
         i = start_index
@@ -26,8 +32,9 @@ def find_interfaces(text: str) -> list:
                 interface_name,
                 generic_type,
                 interface_body,
+                extended_interface,
             ),
-        )  # Include generic type
+        )
 
     return interfaces
 
@@ -42,10 +49,15 @@ def parse_interfaces(file_path: str) -> dict:  # noqa: C901
         interface_name = match[0]
         generic_type = match[1] if match[1] else None
         interface_body = match[2]
+        extended_interfaces = match[3] if match[3] else None
 
         attributes = {}
         nested_object = {}
         nested_object_key = None
+
+        if extended_interfaces:
+            extends = [e.strip() for e in extended_interfaces.split(',')]
+            attributes['__EXTENDS'] = extends
 
         for body_line in interface_body.splitlines():
             line = body_line.strip()
@@ -91,3 +103,8 @@ def parse_interfaces(file_path: str) -> dict:  # noqa: C901
         interfaces[interface_name] = attributes
 
     return interfaces
+
+
+if __name__ == '__main__':
+    file = Path(__file__).parents[2] / 'tests' / 'interfaces' / 'extends.ts'
+    print(parse_interfaces(str(file)))
