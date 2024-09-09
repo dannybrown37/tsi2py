@@ -95,5 +95,5 @@ def serialize(interfaces: dict[str, Any]) -> str:
     with Path('typed_dicts.py').open('w') as f:
         f.write(output)
 
-    print('TypedDict classes have been generated and saved to typed_dicts.py')
+    print('\nTypedDict classes have been generated and saved\n\n')
     return output
