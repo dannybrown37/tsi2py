@@ -35,6 +35,7 @@ def find_interfaces(text: str) -> list:
 def parse_interfaces(file_path: str) -> dict:  # noqa: C901
     with Path(file_path).open('r') as f:
         file_content = f.read()
+    print(f'File {file_path} contents have been read:\n\n', file_content)
     interfaces = {}
     matches = find_interfaces(file_content)
     for match in matches:

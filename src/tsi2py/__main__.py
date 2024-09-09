@@ -12,7 +12,6 @@ import click
 def main(path: click.Path) -> None:
     path = str(path)
     interfaces = parse_interfaces(path)
-    pprint(interfaces)
     serialized = serialize(interfaces)
     print(serialized)
 
