@@ -1,5 +1,6 @@
 import re
 from pathlib import Path
+from pprint import pprint
 
 
 def find_interfaces(text: str) -> list:
@@ -107,4 +108,4 @@ def parse_interfaces(file_path: str) -> dict:  # noqa: C901
 
 if __name__ == '__main__':
     file = Path(__file__).parents[2] / 'tests' / 'interfaces' / 'extends.ts'
-    print(parse_interfaces(str(file)))
+    pprint(parse_interfaces(str(file)))

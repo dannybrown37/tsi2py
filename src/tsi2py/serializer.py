@@ -38,6 +38,7 @@ def generate_typed_dict(
         return ''  # Skip if already processed
 
     processed.add(name)
+    extensions = None
     fields = []
     for key, value in properties.items():
         if isinstance(value, dict):
@@ -50,11 +51,17 @@ def generate_typed_dict(
                 result,
             )
             result.append(nested_dict)
+        elif key == '__EXTENDS':
+            extensions = ', '.join(value)
         else:
             python_type = convert_ts_type(value)
             fields.append(f'{key}: {python_type}')
 
     fields_str = '\n    '.join(fields)
+    if extensions and generic:
+        return f'class {name}(TypedDict, {extensions}, Generic[{generic}]):\n    {fields_str}\n'  # noqa: E501
+    if extensions:
+        return f'class {name}(TypedDict, {extensions}):\n    {fields_str}\n'
     if generic:
         return (
             f'class {name}(TypedDict, Generic[{generic}]):\n    {fields_str}\n'

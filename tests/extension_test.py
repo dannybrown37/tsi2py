@@ -18,6 +18,11 @@ def test_parse_interfaces_with_extensions(data_path: Path) -> None:
             'teamSize': 'number',
         },
         'Person': {'age': 'number', 'id': 'number', 'name': 'string'},
+        'Response<T>': {
+            '__EXTENDS': ['Employee'],
+            'data': 'T',
+            'status': 'string',
+        },
         'Supervisor': {
             '__EXTENDS': ['Person', 'Manager'],
             'supervisorId': 'number',

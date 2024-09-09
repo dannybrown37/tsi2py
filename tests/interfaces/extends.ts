@@ -17,3 +17,8 @@ interface Manager extends Employee {
 interface Supervisor extends Person, Manager {
   supervisorId: number;
 }
+
+interface Response<T> extends Employee {
+  data: T;
+  status: string;
+}
