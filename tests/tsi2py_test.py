@@ -50,7 +50,12 @@ def test_serializer() -> None:
     serialized = serialize(interfaces)
     assert (
         serialized
-        == """class User(TypedDict):
+        == """from typing import TypedDict, TypeVar, Literal, Generic, Any
+
+T = TypeVar('T')
+
+
+class User(TypedDict):
     id: int
     username: str
     email: str

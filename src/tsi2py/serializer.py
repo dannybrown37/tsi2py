@@ -86,15 +86,14 @@ def serialize(interfaces: dict[str, Any]) -> str:
         )
         result.append(typed_dict_str)
 
-    generics = ''.join([f'{g} = TypeVar("{g}")\n' for g in generics]) + '\n\n'
+    header = 'from typing import TypedDict, TypeVar, Literal, Generic, Any\n\n'
+    generics = ''.join([f"{g} = TypeVar('{g}')\n" for g in generics]) + '\n\n'
+    result = '\n'.join(result)
+    output = f'{header}{generics}{result}'
 
     # Output to a file
     with Path('typed_dicts.py').open('w') as f:
-        f.write(
-            'from typing import TypedDict, TypeVar, Literal, Generic, Any\n\n',
-        )
-        f.write(generics)
-        f.write('\n'.join(result))
+        f.write(output)
 
     print('TypedDict classes have been generated and saved to typed_dicts.py')
-    return '\n'.join(result)
+    return output
