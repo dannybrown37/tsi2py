@@ -4,8 +4,8 @@ from tsi2py.parser import parse_interfaces
 from tsi2py.serializer import serialize
 
 
-def test_parser() -> None:
-    path = str(Path(__file__).parent / 'interfaces' / 'sample.ts')
+def test_parser(data_path: Path) -> None:
+    path = str(data_path / 'sample.ts')
     interfaces = parse_interfaces(path)
     assert interfaces == {
         'APIResponse<T>': {
@@ -44,8 +44,8 @@ def test_parser() -> None:
     }
 
 
-def test_serializer() -> None:
-    path = str(Path(__file__).parent / 'interfaces' / 'sample.ts')
+def test_serializer(data_path: Path) -> None:
+    path = str(data_path / 'sample.ts')
     interfaces = parse_interfaces(path)
     serialized = serialize(interfaces)
     assert (
