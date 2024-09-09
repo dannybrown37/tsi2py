@@ -81,10 +81,10 @@ class Paths(TypedDict):
     temp: str
 
 class Config(TypedDict):
-    env: "development" | "production" | "test"
+    env: Literal["development"] | Literal["production"] | Literal["test"]
     debug: bool
     version: int
     paths: Paths
-    maxRetries: number | null
+    maxRetries: int | None
 """
     )

@@ -1,12 +1,12 @@
 from pathlib import Path
 from typing import Any
 
+
 TYPE_MAPPING = {
     'string': 'str',
     'number': 'int',
     'boolean': 'bool',
     'Date': 'str',
-    'T': 'Any',
     'null': 'None',
 }
 
@@ -19,6 +19,8 @@ def convert_ts_type(ts_type: str | dict) -> str:
         return ' | '.join(
             convert_ts_type(t.strip()) for t in ts_type.split('|')
         )
+    if "'" in ts_type or '"' in ts_type:
+        return f'Literal[{ts_type}]'
     if ts_type.endswith('[]'):
         return f'list[{TYPE_MAPPING.get(ts_type[:-2], ts_type[:-2])}]'
     return TYPE_MAPPING.get(ts_type, ts_type)
@@ -73,7 +75,7 @@ def serialize(interfaces: dict[str, Any]) -> str:
 
     # Output to a file
     with Path('typed_dicts.py').open('w') as f:
-        f.write('from typing import TypedDict, Generic, Any\n\n')
+        f.write('from typing import TypedDict, Literal, Generic, Any\n\n')
         f.write('\n'.join(result))
 
     print('TypedDict classes have been generated and saved to typed_dicts.py')
