@@ -4,7 +4,7 @@ from tsi2py.parser import parse_interfaces
 from tsi2py.serializer import serialize
 
 
-def test_parser(data_path: Path) -> None:
+def test_parser_basic(data_path: Path) -> None:
     path = str(data_path / 'sample.ts')
     interfaces = parse_interfaces(path)
     assert interfaces == {
@@ -44,7 +44,7 @@ def test_parser(data_path: Path) -> None:
     }
 
 
-def test_serializer(data_path: Path) -> None:
+def test_serializer_basic(data_path: Path) -> None:
     path = str(data_path / 'sample.ts')
     interfaces = parse_interfaces(path)
     serialized = serialize(interfaces)
@@ -62,12 +62,14 @@ class User(TypedDict):
     isActive: bool
     createdAt: str
 
+
 class Product(TypedDict):
     id: str
     name: str
     price: int
     tags: list[str]
     available: bool
+
 
 class Order(TypedDict):
     orderId: int
@@ -76,14 +78,17 @@ class Order(TypedDict):
     totalAmount: int
     orderDate: str
 
+
 class APIResponse(TypedDict, Generic[T]):
     data: T
     success: bool
     message: str
 
+
 class Paths(TypedDict):
     logs: str
     temp: str
+
 
 class Config(TypedDict):
     env: Literal["development"] | Literal["production"] | Literal["test"]

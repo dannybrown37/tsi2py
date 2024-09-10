@@ -3,6 +3,34 @@ from pathlib import Path
 from pprint import pprint
 
 
+def convert_ts_enums_to_python(file_path: str) -> str:
+    ts_enum_pattern = re.compile(r'enum\s+(\w+)\s*{([^}]+)}', re.MULTILINE)
+    enum_value_pattern = re.compile(r'(\w+)\s*=\s*["\']?(\w+)["\']?')
+
+    with Path(file_path).open('r') as ts_file:
+        ts_content = ts_file.read()
+
+    python_enums = []
+    matches = ts_enum_pattern.findall(ts_content)
+
+    for match in matches:
+        enum_name, enum_body = match
+        enum_body = [e.strip() for e in enum_body.split(',')]
+        python_enum = f'class {enum_name}(Enum):\n'
+        for enum_member in enum_body:
+            if enum_member:
+                value_match = enum_value_pattern.search(enum_member)
+                if value_match:
+                    member_name, member_value = value_match.groups()
+                else:
+                    member_name = enum_member
+                    member_value = enum_member
+                python_enum += f"    {member_name} = '{member_value}'\n"
+        python_enums.append(python_enum)
+
+    return '\n\n'.join(python_enums)
+
+
 def find_interfaces(text: str) -> list:
     regex = r'interface\s+(\w+)(<\w+>)?\s*(extends\s+[\w\s,]+)?\s*{'
     interface_pattern = re.compile(regex)
@@ -109,3 +137,6 @@ def parse_interfaces(file_path: str) -> dict:  # noqa: C901
 if __name__ == '__main__':
     file = Path(__file__).parents[2] / 'tests' / 'interfaces' / 'extends.ts'
     pprint(parse_interfaces(str(file)))
+
+    file = file.parent / 'enum.ts'
+    pprint(convert_ts_enums_to_python(str(file)))

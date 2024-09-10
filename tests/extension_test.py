@@ -47,16 +47,20 @@ class Person(TypedDict):
     name: str
     age: int
 
+
 class Employee(TypedDict, Person):
     employeeId: int
     department: str
+
 
 class Manager(TypedDict, Employee):
     teamSize: int
     managesDepartments: list[str]
 
+
 class Supervisor(TypedDict, Person, Manager):
     supervisorId: int
+
 
 class Response(TypedDict, Employee, Generic[T]):
     data: T
