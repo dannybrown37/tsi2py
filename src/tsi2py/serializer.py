@@ -96,11 +96,11 @@ def serialize(interfaces: dict[str, Any], enums: str | None = None) -> str:
         result.append(typed_dict_str)
 
     enum_import = 'from enum import Enum\n' if enums else ''
-    header = 'from typing import TypedDict, TypeVar, Literal, Generic, Any\n\n'
+    head = 'from typing import TypedDict, TypeVar, Literal, Generic, Any\n\n\n'
     generics = ''.join([f"{g} = TypeVar('{g}')\n" for g in generics]) + '\n\n'
     enums = f'{enums}\n\n' if enums else ''
     result = '\n\n'.join(result)
-    output = f'{enum_import}{header}{generics}{enums}{result}'
+    output = f'{enum_import}{head}{generics}{enums}{result}'
 
     # Output to a file
     with Path('typed_dicts.py').open('w') as f:

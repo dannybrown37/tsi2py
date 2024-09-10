@@ -52,6 +52,7 @@ def test_serializer_basic(data_path: Path) -> None:
         serialized
         == """from typing import TypedDict, TypeVar, Literal, Generic, Any
 
+
 T = TypeVar('T')
 
 
