@@ -2,7 +2,7 @@ from pathlib import Path
 from pprint import pprint
 
 from tsi2py.parser import parse_interfaces, convert_ts_enums_to_python
-from tsi2py.serializer import serialize
+from tsi2py.serializer import serialize_file
 
 import click
 
@@ -13,7 +13,7 @@ def main(path: click.Path) -> None:
     str_path = str(path)
     interfaces = parse_interfaces(str_path)
     enums = convert_ts_enums_to_python(str_path)
-    serialized = serialize(interfaces, enums)
+    serialized = serialize_file(interfaces, enums)
     print(serialized)
 
 

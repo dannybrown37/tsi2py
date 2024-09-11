@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from tsi2py.parser import parse_interfaces
-from tsi2py.serializer import serialize
+from tsi2py.serializer import serialize_file
 
 
 def test_parser_basic(data_path: Path) -> None:
@@ -47,7 +47,7 @@ def test_parser_basic(data_path: Path) -> None:
 def test_serializer_basic(data_path: Path) -> None:
     path = str(data_path / 'sample.ts')
     interfaces = parse_interfaces(path)
-    serialized = serialize(interfaces)
+    serialized = serialize_file(interfaces)
     assert (
         serialized
         == """from typing import TypedDict, TypeVar, Literal, Generic, Any

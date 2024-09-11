@@ -1,8 +1,6 @@
 from pathlib import Path
 from typing import Any
 
-from tsi2py.parser import convert_ts_enums_to_python
-
 
 TYPE_MAPPING = {
     'string': 'str',
@@ -28,7 +26,7 @@ def convert_ts_type(ts_type: str | dict) -> str:
     return TYPE_MAPPING.get(ts_type, ts_type)
 
 
-def generate_typed_dict(
+def generate_typed_dict_str(
     name: str,
     properties: dict[str, Any],
     processed: set,
@@ -46,7 +44,7 @@ def generate_typed_dict(
         if isinstance(value, dict):
             nested_name = key.capitalize()
             fields.append(f'{key}: {nested_name}')
-            nested_dict = generate_typed_dict(
+            nested_dict = generate_typed_dict_str(
                 nested_name,
                 value,
                 processed,
@@ -71,7 +69,10 @@ def generate_typed_dict(
     return f'class {name}(TypedDict):\n    {fields_str}\n'
 
 
-def serialize(interfaces: dict[str, Any], enums: str | None = None) -> str:
+def serialize_file(
+    interfaces: dict[str, Any],
+    enums: str | None = None,
+) -> str:
     """Serialize a dictionary into a string of Python TypedDict classes."""
 
     # Generate TypedDict classes
@@ -86,7 +87,7 @@ def serialize(interfaces: dict[str, Any], enums: str | None = None) -> str:
             generics.append(generic)
         else:
             typed_dict_name = name
-        typed_dict_str = generate_typed_dict(
+        typed_dict_str = generate_typed_dict_str(
             typed_dict_name,
             properties,
             processed,
